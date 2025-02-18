@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import SideBarComp from "@/components/side-bar-comp";
-import HeaderComponent from "@/components/Header-component";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,13 +37,8 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="grid h-screen grid-cols-[auto,1fr] w-full">
-              <SideBarComp />
-              <div className="flex h-screen flex-col w-full overflow-y-auto">
-                <HeaderComponent />
-                <div>{children}</div>
-              </div>
-            </div>
+            <Toaster position="top-right" reverseOrder={false} />
+            {children}
           </ThemeProvider>
         </SidebarProvider>
       </body>
