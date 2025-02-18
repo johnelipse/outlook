@@ -58,6 +58,11 @@ const folderLinks = [
     icon: <Inbox className="h-4 w-4" />,
   },
   {
+    link: "/sent-emails",
+    name: "Sent",
+    icon: <Clock className="h-4 w-4" />,
+  },
+  {
     link: "#",
     name: "Snoozed",
     icon: <Clock className="h-4 w-4" />,

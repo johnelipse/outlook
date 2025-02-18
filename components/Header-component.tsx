@@ -2,15 +2,18 @@ import React from "react";
 import { ChevronDown, MoreHorizontal, Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 export default function HeaderComponent() {
   return (
-    <header className="border-b fixed top-0 w-[80%] bg-background px-6 py-3">
+    <header className="border-b fixed top-0 w-[80%] z-50 bg-background px-6 py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            New Email
+          <Button asChild>
+            <Link href="/create-email">
+              <Plus className="mr-2 h-4 w-4" />
+              New Email
+            </Link>
           </Button>
           <div className="flex items-center gap-2">
             <Input

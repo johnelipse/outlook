@@ -1,14 +1,15 @@
-import { getInboxEmails } from "@/actions/email";
+import { getSentEmails } from "@/actions/email";
 import { EmailList } from "@/components/email-list";
 import React from "react";
 
 export default async function page() {
-  const emails = (await getInboxEmails()) || [];
+  const emails = (await getSentEmails()) || [];
   return (
     <div>
       <div>
         <div className="overflow-auto">
-          <EmailList inboxEmails={emails} />
+          {/* <SentEmailList sentEmails={emails} /> */}
+          <EmailList sentEmails={emails} />
           {/* <ReadingPane /> */}
         </div>
       </div>
