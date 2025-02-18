@@ -1,3 +1,4 @@
+import { getInboxEmails, getSentEmails } from "@/actions/email";
 import HeaderComponent from "@/components/Header-component";
 import SideBarComp from "@/components/side-bar-comp";
 import { authOptions } from "@/config/auth";
@@ -11,9 +12,11 @@ export default async function layout({ children }: { children: ReactNode }) {
   if (!session) {
     redirect("/login");
   }
+  const emails = (await getInboxEmails()) || [];
+  const sentEmails = (await getSentEmails()) || [];
   return (
     <div className="grid h-screen grid-cols-[auto,1fr] w-full">
-      <SideBarComp />
+      <SideBarComp inEmails={emails} sentEmails={sentEmails} />
       <div className="flex h-screen flex-col w-full overflow-y-auto">
         <HeaderComponent />
         <div>{children}</div>

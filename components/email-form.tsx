@@ -86,7 +86,7 @@ export default function EmailForm({ userData }: { userData: Session | null }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-white shadow-lg rounded-lg max-w-4xl mx-auto p-6"
+      className="bg-white dark:bg-gray-950 shadow-lg rounded-lg max-w-4xl mx-auto p-6"
     >
       <div className="flex items-center gap-3 border-b border-gray-200 pb-3 justify-between mb-4">
         <div className="flex items-center  w-full gap-2">
@@ -117,7 +117,7 @@ export default function EmailForm({ userData }: { userData: Session | null }) {
             </Button>
           </div>
 
-          <div className="flex items-center w-full gap-1 text-sm text-gray-700">
+          <div className="flex items-center w-full gap-1 text-sm dark:text-gray-100 text-gray-700">
             <span>From:</span>
             <div>
               <Input

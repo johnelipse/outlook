@@ -120,7 +120,7 @@ export default function VEditor({
       attributes: {
         class: `${
           variant === "default" ? "min-h-[29.7cm]" : "h-40"
-        } w-full mx-auto p-4 shadow-lg border rounded-lg prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none focus:outline-none bg-white overflow-y-auto`,
+        } w-full mx-auto dark:bg-gray-950 p-4 shadow-lg border rounded-lg prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none focus:outline-none bg-white overflow-y-auto`,
       },
     },
     onUpdate: ({ editor }) => {
@@ -163,15 +163,19 @@ export default function VEditor({
   };
 
   return (
-    <div className={`bg-gray-100 p-4 ${variant === "default" ? "lg:p-8" : ""}`}>
+    <div
+      className={`bg-gray-100 dark:bg-gray-950 p-4 ${
+        variant === "default" ? "lg:p-8" : ""
+      }`}
+    >
       <div
         className={`mx-auto ${
-          variant === "default" ? "max-w-[21cm]" : "max-w-full"
+          variant === "default" ? "max-w-[21cm] dark:bg-gray-950" : "max-w-full"
         }`}
       >
         {isEditable && (
-          <div className="mb-4 rounded-lg border bg-white shadow-sm">
-            <div className="flex flex-wrap items-center gap-1 border-b p-2">
+          <div className="mb-4 rounded-lg border bg-white shadow-sm dark:bg-gray-950">
+            <div className="flex dark:bg-gray-950 flex-wrap items-center gap-1 border-b p-2">
               <Select
                 value={
                   editor.isActive("heading", { level: 1 })
@@ -423,7 +427,7 @@ export default function VEditor({
                     Preview
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-[21cm] w-full max-h-[80vh] overflow-y-auto">
+                <DialogContent className="max-w-[21cm] w-full dark:bg-gray-950 max-h-[80vh] overflow-y-auto">
                   <div className="prose max-w-none">
                     <div
                       dangerouslySetInnerHTML={{ __html: editor.getHTML() }}

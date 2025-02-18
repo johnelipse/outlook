@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { ModeToggle } from "./mode-toggle";
 import Link from "next/link";
@@ -28,6 +29,9 @@ import {
   User2,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { usePathname } from "next/navigation";
+import { Email } from "@prisma/client";
+import { Badge } from "./ui/badge";
 
 const topLinks = [
   {
@@ -56,11 +60,13 @@ const folderLinks = [
     link: "/email-list",
     name: "Inbox",
     icon: <Inbox className="h-4 w-4" />,
+    number: "",
   },
   {
     link: "/sent-emails",
     name: "Sent",
     icon: <Clock className="h-4 w-4" />,
+    number: "",
   },
   {
     link: "#",
@@ -84,10 +90,19 @@ const folderLinks = [
   },
 ];
 
-export default function SideBarComp() {
+export default function SideBarComp({
+  inEmails,
+  sentEmails,
+}: {
+  inEmails: Email[];
+  sentEmails: Email[];
+}) {
+  const inboxCount = inEmails.length;
+  const sentCount = sentEmails.length;
+  const pathname = usePathname();
   return (
     <Sidebar>
-      <SidebarHeader className="border-b p-2">
+      <SidebarHeader className="border-b bg-blue-600 text-white p-2">
         <SidebarTrigger />
         <div className="flex items-center gap-2 px-2">
           <User2 className="h-6 w-6" />
@@ -103,9 +118,16 @@ export default function SideBarComp() {
           <SidebarGroupContent>
             <SidebarMenu>
               {topLinks.map((link, i) => {
+                const url = link.link;
+                const isActive = pathname === url;
                 return (
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton
+                      className={`${
+                        isActive ? "bg-gray-100 dark:bg-blue-900" : ""
+                      }`}
+                      asChild
+                    >
                       <Link key={i} href={link.link}>
                         {link.icon}
                         <span>{link.name}</span>
@@ -122,12 +144,36 @@ export default function SideBarComp() {
           <SidebarGroupContent>
             <SidebarMenu>
               {folderLinks.map((link, i) => {
+                const url = link.link;
+                const isActive = pathname === url;
+                let count;
+                if (link.name === "Inbox") {
+                  count = inboxCount;
+                } else if (link.name === "Sent") {
+                  count = sentCount;
+                }
                 return (
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link key={i} href={link.link}>
-                        {link.icon}
-                        <span>{link.name}</span>
+                    <SidebarMenuButton
+                      className={`${
+                        isActive ? "bg-gray-100 dark:bg-blue-900" : ""
+                      }`}
+                      asChild
+                    >
+                      <Link
+                        className="flex justify-between items-center"
+                        key={i}
+                        href={link.link}
+                      >
+                        <div className="flex items-center gap-2">
+                          {link.icon}
+                          <span>{link.name}</span>
+                        </div>
+                        {link.number && (
+                          <Badge className="w-4 h-4 rounded-full flex items-center justify-center">
+                            {count}
+                          </Badge>
+                        )}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

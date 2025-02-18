@@ -62,6 +62,7 @@ export async function sendEmail(data: EmailData) {
     revalidatePath("/email-list");
     revalidatePath("/sent-emails");
     revalidatePath("/email");
+    revalidatePath("/");
     return { success: true, data: createdEmail, status: 201 };
   } catch (error) {
     console.error("Failed to send email:", error);
@@ -130,6 +131,7 @@ export async function deleteEmail(id: string) {
     revalidatePath("/email-list");
     revalidatePath("/sent-emails");
     revalidatePath("/email");
+    revalidatePath("/");
     return { ok: true };
   } catch (error) {
     console.log(error);
