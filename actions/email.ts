@@ -5,10 +5,12 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { authOptions } from "@/config/auth";
 import { db } from "@/prisma/db";
+import { ThankYouEmail } from "@/components/email-template";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 type EmailData = {
+  senderEmail: string;
   recieverEmail: string;
   subject: string;
   message: string;
@@ -26,6 +28,8 @@ export async function sendEmail(data: EmailData) {
       status: 409,
     };
   }
+
+  const { senderEmail, recieverEmail, subject } = data;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
@@ -36,23 +40,11 @@ export async function sendEmail(data: EmailData) {
     if (!data.recieverEmail || !data.subject || !data.message) {
       throw new Error("Missing required fields");
     }
-
-    // Handle attachments if present
-    // const attachments = data.attachments
-    //   ? await Promise.all(
-    //       data.attachments.map(async (file) => ({
-    //         filename: file.name,
-    //         content: await file.arrayBuffer(),
-    //       }))
-    //     )
-    //   : [];
-
-    // Send email using Resend
-    const result = await resend.emails.send({
-      from: `${session.user.name} <${session.user.email}>`,
+    await resend.emails.send({
+      from: "OutLook  <jb@comedev.org>",
       to: data.recieverEmail,
-      subject: data.subject,
-      html: data.message,
+      subject: `Message about: ${subject}`,
+      react: ThankYouEmail({ senderEmail, recieverEmail, subject }),
     });
 
     // Store in database
@@ -78,23 +70,6 @@ export async function sendEmail(data: EmailData) {
     );
   }
 }
-
-// export async function getEmails(type: "INBOX" | "SENT" | "DRAFT") {
-//   const session = await getServerSession(authOptions);
-//   if (!session?.user?.email) {
-//     throw new Error("Unauthorized");
-//   }
-
-//   return prisma.email.findMany({
-//     where: {
-//       OR: [
-//         { userId: session.user.id, type },
-//         { to: { has: session.user.email }, type: "INBOX" },
-//       ],
-//     },
-//     orderBy: { createdAt: "desc" },
-//   });
-// }
 
 export async function getSentEmails() {
   const session = await getServerSession(authOptions);
@@ -142,5 +117,22 @@ export async function getSingleEmail(id: string) {
   } catch (error) {
     console.log(error);
     return null;
+  }
+}
+
+export async function deleteEmail(id: string) {
+  try {
+    await db.email.delete({
+      where: {
+        id,
+      },
+    });
+    revalidatePath("/email-list");
+    revalidatePath("/sent-emails");
+    revalidatePath("/email");
+    return { ok: true };
+  } catch (error) {
+    console.log(error);
+    return { ok: false };
   }
 }

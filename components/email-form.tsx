@@ -13,11 +13,13 @@ import {
   Trash2,
   Maximize2,
   ChevronDown,
+  Loader,
 } from "lucide-react";
 import VEditor from "./rich-text";
 import { Session } from "next-auth";
 import toast from "react-hot-toast";
 import { sendEmail } from "@/actions/email";
+import { useRouter } from "next/navigation";
 
 export type EmailProps = {
   senderEmail: string;
@@ -30,6 +32,8 @@ export type EmailProps = {
 export default function EmailForm({ userData }: { userData: Session | null }) {
   const [content, setContent] = useState("<p>Initial content</p>");
   const [err, setErr] = useState("");
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const {
     register,
     reset,
@@ -44,12 +48,18 @@ export default function EmailForm({ userData }: { userData: Session | null }) {
   async function onSubmit(data: EmailProps) {
     data.message = content;
     try {
+      setLoading(true);
       const res = await sendEmail(data);
       if (res.status === 201) {
         toast.success("Created successfully.");
+        setLoading(false);
         reset();
+        setContent("");
+        router.push("/sent-emails");
+        router.refresh();
       } else if (res.status === 409) {
         setErr("The email entered is not signed on outlook.");
+        setLoading(false);
         toast.error("The email entered is not signed on outlook.");
       }
       // const res = await fetch("/api/v1/emails", {
@@ -69,6 +79,7 @@ export default function EmailForm({ userData }: { userData: Session | null }) {
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
+      setLoading(false);
     }
   }
 
@@ -80,13 +91,24 @@ export default function EmailForm({ userData }: { userData: Session | null }) {
       <div className="flex items-center gap-3 border-b border-gray-200 pb-3 justify-between mb-4">
         <div className="flex items-center  w-full gap-2">
           <div className="flex items-center gap-[0.1rem]">
-            <Button
-              type="submit"
-              className="bg-[#2383d6] rounded-l-md rounded-r-none hover:bg-[#0a5494] text-white flex items-center gap-1"
-            >
-              <Send className="h-4 w-4" />
-              Send
-            </Button>
+            {loading ? (
+              <Button
+                type="button"
+                disabled
+                className="bg-[#2383d6] rounded-l-md rounded-r-none hover:bg-[#0a5494] text-white flex items-center gap-1"
+              >
+                <Loader className="h-4 w-4 animate-spin" />
+                Sending..
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                className="bg-[#2383d6] rounded-l-md rounded-r-none hover:bg-[#0a5494] text-white flex items-center gap-1"
+              >
+                <Send className="h-4 w-4" />
+                Send
+              </Button>
+            )}
             <Button
               type="button"
               className="bg-[#2383d6] rounded-r-md rounded-l-none px-1 hover:bg-[#0a5494] text-white flex items-center gap-1"
@@ -176,13 +198,24 @@ export default function EmailForm({ userData }: { userData: Session | null }) {
       </div>
 
       <div className="mt-6 flex justify-between items-center">
-        <Button
-          type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          <Send className="h-4 w-4 mr-2" />
-          Send
-        </Button>
+        {loading ? (
+          <Button
+            type="button"
+            disabled
+            className="bg-[#2383d6] rounded-l-md rounded-r-md hover:bg-[#0a5494] text-white flex items-center gap-1"
+          >
+            <Loader className="h-4 w-4 animate-spin" />
+            Sending..
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            className="bg-[#2383d6] rounded-l-md rounded-r-md hover:bg-[#0a5494] text-white flex items-center gap-1"
+          >
+            <Send className="h-4 w-4" />
+            Send
+          </Button>
+        )}
         <div>
           <Button variant="ghost" size="icon" className="mr-2">
             <Paperclip className="h-5 w-5" />
