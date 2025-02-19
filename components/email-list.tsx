@@ -11,6 +11,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { deleteEmail } from "@/actions/email";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { getTimeAgo } from "@/lib/get-time";
 
 export function EmailList({
   sentEmails,
@@ -97,6 +98,7 @@ export function EmailList({
         {emails.map((email, i) => {
           const url = `/email/${email.id}`;
           const isActive = pathname === url;
+          const timeDiff = getTimeAgo(email.createdAt);
           return (
             <Link
               href={url}
@@ -112,7 +114,7 @@ export function EmailList({
                   <div className="font-semibold">{email.senderEmail}</div>
                   <Star className="h-4 w-4 text-yellow-500" />
                 </div>
-                <div className="text-xs text-muted-foreground">2:00AM</div>
+                <div className="text-xs text-muted-foreground">{timeDiff}</div>
               </div>
               <div className="font-medium">{email.subject}</div>
               <div

@@ -18,6 +18,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Email } from "@prisma/client";
 import { Session } from "next-auth";
+import { getTimeAgo } from "@/lib/get-time";
 
 export function ReadingPane({
   emailData,
@@ -28,6 +29,7 @@ export function ReadingPane({
   isSentEmail: boolean;
   user: Session | null;
 }) {
+  const timeDiff = getTimeAgo(emailData?.createdAt as Date);
   if (!emailData) {
     return (
       <div className="flex flex-col fixed top-[9%] left-[49%] w-[50%] h-[91vh] bg-gray-50 dark:bg-black items-center justify-center p-8">
@@ -116,7 +118,7 @@ export function ReadingPane({
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Clock className="h-4 w-4" />
-                    <span>Today at 2:00 AM</span>
+                    <span>{timeDiff}</span>
                   </div>
                 </div>
               </div>

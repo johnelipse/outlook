@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function HeaderComponent() {
   return (
-    <header className="border-b fixed top-0 w-[80%] z-50 bg-blue-600 text-white px-6 py-3">
+    <header className="border-b fixed top-0 w-[81%] z-50 bg-blue-600 text-white px-6 py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button className="bg-white hover:bg-white text-black" asChild>
