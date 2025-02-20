@@ -17,7 +17,7 @@ interface EmailProps {
   recieverEmail: string;
   subject: string;
 }
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+const baseUrl = "https://outlook-lovat.vercel.app";
 const currentDate = new Date().getFullYear();
 
 export function ThankYouEmail({
@@ -44,7 +44,7 @@ export function ThankYouEmail({
                   {subject}
                 </Text>
                 <Button
-                  href={`/${baseUrl}/email-list`}
+                  href={`${baseUrl}/email-list`}
                   className="bg-black cursor-pointer text-white font-bold py-2 px-4 rounded mt-4 hover:bg-black"
                 >
                   View your message

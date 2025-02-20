@@ -136,10 +136,10 @@ export default function EmailForm({ userData }: { userData: Session | null }) {
           </div>
         </div>
         <div className="flex items-center gap-2 text-gray-600">
-          <button className="hover:bg-gray-100 p-2 rounded">
+          <button type="button" className="hover:bg-gray-100 p-2 rounded">
             <Trash2 className="h-5 w-5" />
           </button>
-          <button className="hover:bg-gray-100 p-2 rounded">
+          <button type="button" className="hover:bg-gray-100 p-2 rounded">
             <Maximize2 className="h-5 w-5" />
           </button>
         </div>
@@ -217,10 +217,10 @@ export default function EmailForm({ userData }: { userData: Session | null }) {
           </Button>
         )}
         <div>
-          <Button variant="ghost" size="icon" className="mr-2">
+          <Button type="button" variant="ghost" size="icon" className="mr-2">
             <Paperclip className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button type="button" variant="ghost" size="icon">
             <MoreHorizontal className="h-5 w-5" />
           </Button>
         </div>
